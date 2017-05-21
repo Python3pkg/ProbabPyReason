@@ -59,7 +59,7 @@ class HiddenMarkovModel:
             if t == T:
                 state_var_symbol = {(self.state_var, t): self.observation_pdf(t).Vars[(self.state_var, t)]}
                 if self.observation_pdf_template.is_discrete_finite():
-                    var_values___frozen_dicts = self.observation_pdf(t).Params['NegLogP'].keys()
+                    var_values___frozen_dicts = list(self.observation_pdf(t).Params['NegLogP'].keys())
                     state_var_domain =\
                         set(frozendict({(self.state_var, t): var_values___frozen_dict[(self.state_var, t)]})
                             for var_values___frozen_dict in var_values___frozen_dicts)
@@ -79,7 +79,7 @@ class HiddenMarkovModel:
             t = T
             state_var_symbol = {(self.state_var, t): self.observation_pdf(t).Vars[(self.state_var, t)]}
             if self.observation_pdf_template.is_discrete_finite():
-                var_values___frozen_dicts = self.observation_pdf(t).Param['NegLogP'].keys()
+                var_values___frozen_dicts = list(self.observation_pdf(t).Param['NegLogP'].keys())
                 state_var_domain =\
                     set(frozendict({(self.state_var, t): var_values___frozen_dict[(self.state_var, t)]})
                         for var_values___frozen_dict in var_values___frozen_dicts)
@@ -89,7 +89,7 @@ class HiddenMarkovModel:
                 b = {t: OnePDF(cond={(self.observation_var, t): None})}
             if t in t___list:
                 d[t] = b[t]
-            for t in reversed(range(min(t___list), T)):
+            for t in reversed(list(range(min(t___list), T))):
                 b[t] = self.transition_pdf(t + 1) * self.observation_pdf(t + 1)
                 if (t + 1) in observations___dict:
                     b[t] = b[t].at({(self.observation_var, t + 1): observations___dict[t + 1]})
@@ -101,7 +101,7 @@ class HiddenMarkovModel:
 
     def infer_state(self, t___list, observations___dict={}):
         conditions___dict = {}
-        for t, value in observations___dict.items():
+        for t, value in list(observations___dict.items()):
             conditions___dict[(self.observation_var, t)] = value
         if isinstance(t___list, int):
             t = t___list
